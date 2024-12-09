@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="Google Sheet.css">
+</head>
+<body>
+  <div class="container">
+    <form method="post" action="https://script.google.com/macros/s/AKfycbx5lxgg-p2AuF3PuI8iXLranMQw_R2fnyunkIQ2tcFM6vGQWHjKWnkOEupktqgv5rcdwA/exec" name="contact-form">
+      <h4>Claim Form</h4>
+
+      <!-- S.No -->
+      <input type="text" name="S.No" placeholder="S.No" required>
+
+      <!-- Ticket ID -->
+      <input type="text" name="Ticket ID" placeholder="Ticket ID" required>
+
+      <!-- Ticket Date -->
+      <input type="date" name="Ticket Date" placeholder="Ticket Date" required>
+
+      <!-- Customer Name -->
+      <input type="text" name="Customer Name" placeholder="Customer Name" required>
+
+      <!-- Customer Phone Number -->
+      <input type="text" name="Customer Phone Number" placeholder="Customer Phone Number" required>
+
+      <!-- Claim Battery S.No -->
+      <input type="text" name="Claim Battery S.No" placeholder="Claim Battery S.No" required>
+
+      <!-- Date of Sale -->
+      <input type="date" name="Date of Sale" placeholder="Date of Sale" required>
+
+      <!-- FOC Battery Type -->
+      <input type="text" name="FOC Battery Type" placeholder="FOC Battery Type" required>
+
+      <!-- FOC Battery S.No -->
+      <input type="text" name="FOC Battery S.No" placeholder="FOC Battery S.No" required>
+
+      <!-- OE/TR -->
+      <select name="oe-tr" id="oe-tr" required>
+        <option value="" disabled selected>OE/TR</option>
+        <option value="OE">OE</option>
+        <option value="TR">TR</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <!-- Other OE/TR field (appears only when "Other" is selected) -->
+      <input type="text" name="oe-tr-other" id="oe-tr-other" placeholder="Specify Other" style="display:none;">
+
+      <!-- Type of OE -->
+      <select name="type-of-oe" id="type-of-oe" required>
+        <option value="" disabled selected>Type of OE</option>
+        <option value="Honda">Honda</option>
+        <option value="Hero">Hero</option>
+        <option value="TVS">TVS</option>
+        <option value="Suzuki">Suzuki</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <!-- Other Type of OE field (appears only when "Other" is selected) -->
+      <input type="text" name="type-of-oe-other" id="type-of-oe-other" placeholder="Specify Other" style="display:none;">
+
+      <!-- Dealer Code -->
+      <input type="text" name="Dealer Code" placeholder="Dealer Code" required>
+
+      <!-- Dealer Name -->
+      <input type="text" name="Dealer Name" placeholder="Dealer Name" required>
+
+      <!-- Submit Button -->
+      <input type="submit" value="Submit" id="submit">
+    </form>
+  </div>
+
+  <!-- Thank You Modal -->
+  <div id="thank-you-modal" class="modal">
+    <div class="modal-content">
+      <h3>Thank You for submitting the form!</h3>
+      <p>Your claim has been successfully submitted.</p>
+      <button id="close-modal">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbx5lxgg-p2AuF3PuI8iXLranMQw_R2fnyunkIQ2tcFM6vGQWHjKWnkOEupktqgv5rcdwA/exec";
+    const form = document.forms['contact-form'];
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => {
+          // Show the Thank You modal after form submission
+          document.getElementById('thank-you-modal').style.display = 'block';
+        })
+        .catch(error => console.error('Error!', error.message));
+    });
+
+    // Close the modal when the "Close" button is clicked
+    document.getElementById('close-modal').addEventListener('click', () => {
+      document.getElementById('thank-you-modal').style.display = 'none';
+      window.location.reload();
+    });
+
+    // JavaScript to toggle the visibility of the "Other" input fields
+    document.getElementById('oe-tr').addEventListener('change', function() {
+      var oeTrOtherInput = document.getElementById('oe-tr-other');
+      if (this.value === 'Other') {
+        oeTrOtherInput.style.display = 'block';
+      } else {
+        oeTrOtherInput.style.display = 'none';
+      }
+    });
+
+    document.getElementById('type-of-oe').addEventListener('change', function() {
+      var typeOfOeOtherInput = document.getElementById('type-of-oe-other');
+      if (this.value === 'Other') {
+        typeOfOeOtherInput.style.display = 'block';
+      } else {
+        typeOfOeOtherInput.style.display = 'none';
+      }
+    });
+  </script>
+
+  <style>
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* Background with opacity */
+      padding-top: 100px;
+      text-align: center;
+    }
+    .modal-content {
+      background-color: white;
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 50%;
+    }
+    #close-modal {
+      padding: 10px 20px;
+      background-color: orangered;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #close-modal:hover {
+      background-color: #333;
+    }
+  </style>
+</body>
+</html>
